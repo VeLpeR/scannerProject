@@ -6,7 +6,12 @@
   <div class="columns">
     <p>Other contents shown</p>
   </div>
-  <div class="controls" *ngIf="isButtonDivVisible" >
+  <div *ngIf="isSubmitted" class="wheelImages">
+    <span *ngFor="let img of selectedImages;">
+      <img src="{{img}}" alt="">
+    </span>
+  </div>
+  <div class="controls" *ngIf="isButtonDivVisible && !isSubmitted" >
       <button (click)="toggleDivs()">From left</button>
       <button (click)="toggleDivs()">From right</button>
       <button (click)="toggleDivs()">Rear left</button>
@@ -14,17 +19,34 @@
 
   </div>
 
-  <div class="tabs" *ngIf="!isButtonDivVisible">
+  <div class="tabs" *ngIf="!isButtonDivVisible && !isSubmitted">
     <div class="tabContent"  (click)="switchDiv(1)" [ngClass]="activeDiv==1?'activeTab':''">Wheels</div>
     <div class="tabContent" (click)="switchDiv(2)" [ngClass]="activeDiv==2?'activeTab':''">Roof</div>
     <div class="tabContent"  (click)="switchDiv(3)" [ngClass]="activeDiv==3?'activeTab':''">Logo</div>
     <div class="tabContent"  (click)="switchDiv(4)" [ngClass]="activeDiv==4?'activeTab':''">Mirrior</div>
   </div>
-  <div *ngIf="!isButtonDivVisible"><div  class="tabContentdiv" [ngClass]="{'show': activeDiv === 1, 'hide': activeDiv !== 1}">
+  <div *ngIf="!isButtonDivVisible && !isSubmitted">
+    <div  class="tabContentdiv" [ngClass]="{'show': activeDiv === 1, 'hide': activeDiv !== 1}">
+    <div class="wheelImages">
+      <span  *ngFor="let img of wheelsData; let i = index;">
+        <img src="{{img.image}}" alt="">
+        <input type="checkbox" [checked]="img.checked" (change)="handleCheckboxChange(i)">
+      </span>
+
+
+    </div>
     <p>CONTENT 1</p>
       </div>
 
       <div  class="tabContentdiv" [ngClass]="{'show': activeDiv === 2, 'hide': activeDiv !== 2}">
+        <div class="wheelImages">
+          <span  *ngFor="let img of logo; let i = index;">
+            <img src="{{img.image}}" alt="">
+            <input type="checkbox" [checked]="img.checked" (change)="handleCheckboxChange(i)">
+          </span>
+
+
+        </div>
         <p>CONTENT 2</p>
       </div>
 
@@ -35,9 +57,11 @@
       <p>CONTENT 4</p>
     </div>
 </div>
+
   <div class="controller" *ngIf="!isButtonDivVisible">
     <button (click)="back()">Back</button>
     <button (click)="next()">Next</button>
+    <button *ngIf="activeDiv==4" (click)="submit()">Submit</button>
   </div>
 
 </div>
